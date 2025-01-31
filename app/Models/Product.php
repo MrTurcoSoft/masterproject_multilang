@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Product extends Model
+class Product extends BaseModel
 {
     use HasFactory;
     use SoftDeletes;
@@ -26,5 +26,34 @@ class Product extends Model
     public function detay()
     {
         return $this->hasOne('App\Models\ProductDetail')->withDefault();
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->getLocalizedAttribute('name');
+    }
+    public function getTitleAttribute()
+    {
+        return $this->getLocalizedAttribute('title');
+    }
+    public function getDescriptionAttribute()
+    {
+        return $this->getLocalizedAttribute('description');
+    }
+    public function getPageTitleAttribute()
+    {
+        return $this->getLocalizedAttribute('page_title');
+    }
+    public function getPageDescriptionAttribute()
+    {
+        return $this->getLocalizedAttribute('page_description');
+    }
+    public function getPageKeywordsAttribute()
+    {
+        return $this->getLocalizedAttribute('page_keywords');
+    }
+    public function getSlugAttribute()
+    {
+        return $this->getLocalizedAttribute('slug');
     }
 }

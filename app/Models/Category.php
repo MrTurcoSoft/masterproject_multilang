@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Category extends Model
+class Category extends BaseModel
 {
     use HasFactory;
 
@@ -29,9 +29,42 @@ class Category extends Model
             return $urun;
         });
     }
+
+    public function getNameAttribute()
+    {
+        return $this->getLocalizedAttribute('cat_name');
+    }
+    public function getTitleAttribute()
+    {
+        return $this->getLocalizedAttribute('title');
+    }
+    public function getDescriptionAttribute()
+    {
+        return $this->getLocalizedAttribute('description');
+    }
+    public function getPageTitleAttribute()
+    {
+        return $this->getLocalizedAttribute('page_title');
+    }
+    public function getPageDescriptionAttribute()
+    {
+        return $this->getLocalizedAttribute('page_description');
+    }
+    public function getPageKeywordsAttribute()
+    {
+        return $this->getLocalizedAttribute('page_keywords');
+    }
+    public function getLocalizedSlugAttribute()
+    {
+        return \App\Helpers\LanguageHelper::getLocalizedColumn($this, 'slug');
+    }
+
+    /**
+     * Altkategoriler ilişkisi tanımı
+     */
     public function altkategoriler()
     {
-        return $this->hasMany('App\Models\Category', 'ust_id', 'id');
-
+        return $this->hasMany(Category::class, 'ust_id', 'id');
     }
+
 }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Slider extends Model
+class Slider extends BaseModel
 {
     use HasFactory;
     use SoftDeletes;
@@ -18,4 +18,22 @@ class Slider extends Model
         'isActive',
         'image'
     ];
+
+    public function getTitleAttribute()
+    {
+        return $this->getLocalizedAttribute('title');
+    }
+    public function getContentAttribute()
+    {
+        return $this->getLocalizedAttribute('content');
+    }
+    public function getContent2Attribute()
+    {
+        return $this->getLocalizedAttribute('content2');
+    }
+    public function getBtnTextAttribute()
+    {
+        return $this->getLocalizedAttribute('btnText');
+    }
 }
+

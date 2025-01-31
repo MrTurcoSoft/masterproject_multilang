@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Post extends Model
+class Post extends BaseModel
 {
     use HasFactory;
 
@@ -32,5 +32,30 @@ class Post extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function getTitleAttribute()
+    {
+        return $this->getLocalizedAttribute('title');
+    }
+    public function getContentAttribute()
+    {
+        return $this->getLocalizedAttribute('content');
+    }
+    public function getPageTitleAttribute()
+    {
+        return $this->getLocalizedAttribute('page_title');
+    }
+    public function getPageDescriptionAttribute()
+    {
+        return $this->getLocalizedAttribute('page_description');
+    }
+    public function getPageKeywordsAttribute()
+    {
+        return $this->getLocalizedAttribute('page_keywords');
+    }
+    public function getSlugAttribute()
+    {
+        return $this->getLocalizedAttribute('slug');
     }
 }

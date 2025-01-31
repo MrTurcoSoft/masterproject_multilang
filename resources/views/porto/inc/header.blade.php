@@ -5,23 +5,24 @@
                 <div class="header-column">
                     <div class="header-row">
                         <div class="header-logo">
-                            <a href="{{ getLocalizedUrl('home') }}">
+                            <a href="{{ route('localized.home', ['locale' => app()->getLocale()]) }}">
                                 <img alt="DellaSoft" width="100" height="48" data-sticky-width="82" data-sticky-height="40" data-sticky-top="25" src="{{ asset(config('settings.logo')) }}">
                             </a>
 
                         </div>
                     </div>
                 </div>
+
                 <div class="header-column justify-content-end">
                     <div class="header-row pt-3">
                         <nav class="header-nav-top">
                             <ul class="nav nav-pills">
                                 <li class="nav-item nav-item-anim-icon d-none d-md-block">
-                                    <a class="nav-link ps-0" href="{{ getLocalizedUrl('about',['about' => 'about']) }}"><i class="fas fa-angle-right"></i> {{___("About Us")}}</a>
+                                    <a class="nav-link ps-0" href="{{ route('localized.about', ['locale' => app()->getLocale()]) }}"><i class="fas fa-angle-right"></i> {{___("About Us")}}</a>
 
                                 </li>
                                 <li class="nav-item nav-item-anim-icon d-none d-md-block">
-                                    <a class="nav-link" href="{{ getLocalizedUrl('contact', ['contact' => 'contact']) }}"><i class="fas fa-angle-right"></i> {{___("Contact Us")}}</a>
+                                    <a class="nav-link" href="{{ route('localized.contact', ['locale' => app()->getLocale()]) }}"><i class="fas fa-angle-right"></i> {{___("Contact Us")}}</a>
 
                                 </li>
                                 <li class="nav-item nav-item-left-border nav-item-left-border-remove nav-item-left-border-md-show">
@@ -38,57 +39,61 @@
                                 <nav class="collapse">
                                     <ul class="nav nav-pills" id="mainNav">
                                         <li class="menu-item ">
-                                            <a class="dropdown-item dropdown-toggle @active('home')" href="{{ getLocalizedUrl('home') }}">
+                                            <a class="dropdown-item dropdown-toggle @active('home')" href="{{ route('localized.home', ['locale' => app()->getLocale()]) }}">
                                                 {{___("Home")}}
                                             </a>
 
                                         </li>
-                                        @foreach($_categories as $key => $category)
-                                            @if($category->altkategoriler->count() > 0)
-                                                <li class="dropdown">
-                                                    <a class="dropdown-item dropdown-toggle" href="javascript:void(0)">
-                                                        {{ strtoupper($category->cat_name) }}
-                                                    </a>
-                                                    <ul class="dropdown-menu">
-                                                        @foreach($category->altkategoriler as $altkategoriler)
-                                                            <li>
-                                                                <a class="dropdown-item" href="{{ getLocalizedUrl('category', ['slug' => $altkategoriler->slug,'category' => 'category']) }}">
-                                                                    {{ strtoupper($altkategoriler->cat_name) }}
-                                                                </a>
-                                                            </li>
-                                                        @endforeach
-                                                    </ul>
-                                                </li>
-                                            @else
-                                                <li class="menu-item">
-                                                    <a class="dropdown-item dropdown-toggle" href="{{ getLocalizedUrl('category', ['slug' => $category->slug,'category' => 'category']) }}">
-                                                        {{ strtoupper($category->cat_name) }}
-                                                    </a>
-                                                </li>
+                                        @foreach ($_categories as $category)
+                                            @if ($category->altkategoriler->count() > 0) {{-- Eğer alt kategoriler varsa --}}
+                                            <li class="dropdown">
+                                                <!-- Ana Kategori İsmi -->
+                                                <a class="dropdown-item dropdown-toggle" href="javascript:void(0)">
+                                                    {{ strtoupper($category->name) }}
+                                                </a>
+                                                <!-- Alt Kategoriler -->
+                                                <ul class="dropdown-menu">
+                                                    @foreach ($category->altkategoriler as $altkategori)
+
+                                                        <li>
+                                                            <a class="dropdown-item" href="{{ route('localized.category', ['locale' => app()->getLocale(), 'slug' => $altkategori->slug]) }}">
+                                                                {{ strtoupper($altkategori->name) }}
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </li>
+                                            @else {{-- Eğer alt kategorisi yoksa --}}
+                                            <li>
+                                                <a class="menu-item" href="{{ route('localized.category', ['locale' => app()->getLocale(), 'slug' => $category->slug]) }}">
+                                                    {{ strtoupper($category->name) }}
+                                                </a>
+                                            </li>
                                             @endif
                                         @endforeach
 
+
                                         <li class="menu-item">
-                                            <a class="dropdown-item dropdown-toggle" href="{{ getLocalizedUrl('catalogue', ['catalogue' => 'catalogue']) }}">
+                                            <a class="dropdown-item dropdown-toggle" href="{{ route('localized.catalogue', ['locale' => app()->getLocale()]) }}">
                                                 {{___("CATALOGUE’S")}}
                                             </a>
 
                                         </li>
                                         <li class="menu-item">
-                                            <a class="dropdown-item dropdown-toggle" href="{{ getLocalizedUrl('blog-posts', ['blog-posts' => 'blog-posts']) }}">
+                                            <a class="dropdown-item dropdown-toggle" href="{{ route('localized.blog-posts', ['locale' => app()->getLocale()]) }}">
                                                 {{___("BLOG")}}
                                             </a>
 
                                         </li>
                                         @mobile
                                         <li class="menu-item">
-                                            <a class="dropdown-item dropdown-toggle" href="{{ getLocalizedUrl('about', ['about' => 'about']) }}">
+                                            <a class="dropdown-item dropdown-toggle" href="{{ route('localized.about', ['locale' => app()->getLocale()]) }}">
                                                 {{___("About Us")}}
                                             </a>
 
                                         </li>
                                         <li class="menu-item">
-                                            <a class="dropdown-item dropdown-toggle" href="{{ getLocalizedUrl('contact', ['contact' => 'contact']) }}">
+                                            <a class="dropdown-item dropdown-toggle" href="{{ route('localized.contact', ['locale' => app()->getLocale()]) }}">
                                                 {{___("Contact Us")}}
                                             </a>
 

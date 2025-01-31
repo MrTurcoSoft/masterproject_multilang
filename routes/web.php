@@ -13,6 +13,7 @@ use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TranslationController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 
@@ -92,73 +93,49 @@ Route::get('/route-list', [\App\Http\Controllers\Admin\RouteController::class, '
 Route::get('lang/home', [LangController::class, 'index']);
 Route::get('lang/change', [LangController::class, 'change'])->name('changeLang');
 
-// Varsayılan dil için (Dil kodu olmadan)
-Route::group(['middleware' => 'setlocale'], function () {
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/{about}', [App\Http\Controllers\AboutController::class, 'index'])
-    ->where('about', 'about')
-    ->name('about');
-Route::get('/{catalogue}', [App\Http\Controllers\HomeController::class, 'catalog'])
-    ->where('catalogue', 'catalogue')
-    ->name('catalogue');
-Route::get('/{contact}', [App\Http\Controllers\ContactController::class, 'index'])
-    ->where('contact', 'contact')
-    ->name('contact');
+/*
+|-------------------------------------------------------------------------|
+| Multi Languages Web Routes                                              |
+|-------------------------------------------------------------------------|
+| Bu dosya, uygulamanız için HTTP rotalarını tanımlar. Bu rotalar         |
+| Burada web rotalarınızı tanımlarsınız. Bu dosya, uygulamanız için       |
+| gelen istekleri yönetir ve yönlendirir. Kodlamada çok dilli destek      |
+| ve varsayılan dil işlenmiştir.                                          |
+|-------------------------------------------------------------------------|
+*/
 
-Route::get('/{category}/{slug}', [App\Http\Controllers\CategoryController::class, 'index'])
-    ->where('category', 'category')
-    ->name('category');
-Route::get('/{product}/{slug}', [App\Http\Controllers\ProductController::class, 'index'])
-    ->where('product', 'product')
-    ->name('product');
 
-Route::get('/{blog-posts}', [App\Http\Controllers\PostController::class, 'index'])
-    ->where('blog-posts', 'blog-posts')
-    ->name('blog-posts');
-Route::get('/{blog-posts}/{slug}', [App\Http\Controllers\PostController::class, 'show'])
-    ->where('blog-posts', 'blog-posts')
-    ->name('blog-posts.show');
 
-});
 
-// Diğer diller için rotalar
-Route::group(['prefix' => '{locale}', 'middleware' => 'setlocale', 'where' => ['locale' => 'fr|de|it|hu|sr|es']], function () {
+// Çok dilli rotaları tanımlama (prefix: {locale})
+Route::group([
+    'prefix' => '{locale}', // Dil kodunu URL'de kullan (örnek: /en, /fr)
+    'middleware' => ['setlocale'], // Middleware ile dili otomatik ayarla
+    'where' => ['locale' => 'fr|de|it|hu|sr|es'] // Desteklenen diller
+], function () {
+    // Ana sayfa
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('localized.home');
-
-    Route::get('/{about}', [App\Http\Controllers\AboutController::class, 'index'])
-        ->where('about', 'a-propos|uber-uns|chi-siamo|rolunk|o-nama|sobre-nosotros')
-        ->name('localized.about');
-
-    Route::get('/{contact}', [App\Http\Controllers\ContactController::class, 'index'])
-        ->where('contact', 'contact|kontakt|contatto|kapcsolat|kontakt|contacto')
-        ->name('localized.contact');
-
-    Route::get('/{catalogue}', [App\Http\Controllers\HomeController::class, 'catalog'])
-        ->where('catalogue', 'catalogue|katalog|catalogo|katalogus|katalog|catalogo')
-        ->name('localized.catalogue');
-
-    Route::get('/{category}/{slug}', [App\Http\Controllers\CategoryController::class, 'index'])
-        ->where('category', 'categorie|kategorie|categoria|kategoriak|kategorija|categoria')
-        ->name('localized.category');
-
-    Route::get('/{product}/{slug}', [App\Http\Controllers\ProductController::class, 'index'])
-        ->where('product', 'produit|produkt|prodotto|termek|proizvod|producto')
-        ->name('localized.product');
-
-    Route::get('/{blog-posts}', [App\Http\Controllers\PostController::class, 'index'])
-        ->where('blog-posts', 'articles|blog-artikel|articoli|blog-bejegyzesek|blog-objave|entradas-de-blog')
-        ->name('localized.blog-posts');
-
-    Route::get('/{blog-posts}/{slug}', [App\Http\Controllers\PostController::class, 'show'])
-        ->where('blog-posts', 'articles|blog-artikel|articoli|blog-bejegyzesek|blog-objave|entradas-de-blog')
-        ->name('localized.blog-posts.show');
+    // Hakkımızda sayfası
+    Route::get('/' . trans('route.about', [], app()->getLocale()), [App\Http\Controllers\AboutController::class, 'index'])->name('localized.about');
+    // İletişim sayfası
+    Route::get('/' . trans('route.contact', [], app()->getLocale()), [App\Http\Controllers\ContactController::class, 'index'])->name('localized.contact');
+    //Katalog sayfası
+    Route::get('/' . trans('route.catalogue', [], app()->getLocale()), [App\Http\Controllers\HomeController::class, 'catalog'])->name('localized.catalogue');
+    // Kategoriler (liste)
+    Route::get('/' . trans('route.category', [], app()->getLocale()). '/{slug}', [App\Http\Controllers\CategoryController::class, 'index'])->name('localized.category');
+    //Product
+    Route::get('/' . trans('route.product', [], app()->getLocale()). '/{slug}', [App\Http\Controllers\ProductController::class, 'index'])->name('localized.product');
+    // Blog postları (liste)
+    Route::get('/' . trans('route.blog_posts', [], app()->getLocale()), [App\Http\Controllers\PostController::class, 'index'])->name('localized.blog-posts');
+    // Blog detay (tek bir yazı)
+    Route::get('/' . trans('route.blog_posts', [], app()->getLocale()) . '/{slug}', [App\Http\Controllers\PostController::class, 'show'])->name('localized.blog-posts.show');
 });
 
 
 Route::get('/sitemap', [SitemapController::class, 'index']);
 
 Route::get('/log-test', function () {
-    \Log::error('Bu bir test logudur!');
+    Log::error('Bu bir test logudur!');
     return 'Log testi tamamlandı.';
 });
 

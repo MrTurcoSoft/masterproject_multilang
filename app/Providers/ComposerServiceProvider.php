@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Category;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,21 +26,14 @@ class ComposerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::composer('*', function ($view) {
-            // Performans optimizasyonu için cache kullanımı
-            $categories = cache()->remember('categories_cache_key', 180, function () {
-                return $categories = Category::all()->where('isActive')->where('ust_id','=',null)->sortBy('must');
-            });
-            // Veriyi view ile paylaşıyoruz
-            $view->with('_categories', $categories);
+        // Ana ve alt kategoriler
+        View::composer('*', function ($view) { // Bu örnekte tüm Blade dosyalarına uygulanır.
+            $view->with('_categories', Category::with('altkategoriler')
+                ->whereNull('ust_id') // Sadece ana kategoriler
+                ->where('isActive', 1) // Sadece aktif kategoriler
+                ->orderBy('must') // Sıralama
+                ->get());
         });
-        View::composer('*', function ($view) {
-            // Performans optimizasyonu için cache kullanımı
-            $sub_categories = cache()->remember('sub_categories_cache_key', 180, function () {
-                return  $sub_categories = Category::all()->where('isActive')->where('ust_id','!=',null)->sortBy('must');
-            });
-            // Veriyi view ile paylaşıyoruz
-            $view->with('_sub_categories', $sub_categories);
-        });
+
     }
 }

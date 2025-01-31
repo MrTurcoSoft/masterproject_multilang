@@ -55,12 +55,18 @@ if (!function_exists('___')) {
 if (!function_exists('getProductUrl')) {
     function getProductUrl($product)
     {
-        if (app()->getLocale() !== 'en') {
-            return route('product', ['locale' => app()->getLocale(), 'slug' => $product->slug]);
+        $locale = app()->getLocale();
+        $parameters = ['slug' => $product->slug];
+
+        if ($locale !== 'en') {
+            $parameters['locale'] = $locale;
         }
-        return route('product', ['slug' => $product->slug]);
+
+        return route('product', $parameters);
     }
 }
+
+
 if (!function_exists('siteAyar')) {
     function siteAyar($str)
     {

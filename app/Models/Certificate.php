@@ -6,11 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Certificate extends Model
+class Certificate extends BaseModel
 {
     use HasFactory;
     use SoftDeletes;
 
     //protected $guarded = array('_token');
     protected $guarded = [];
+
+    public function getNameAttribute()
+    {
+        return $this->getLocalizedAttribute('name');
+    }
+
 }

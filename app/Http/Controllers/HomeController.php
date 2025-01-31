@@ -36,10 +36,6 @@ class HomeController extends Controller
     {
         $minutes = 180;
 
-        $controll= Schema::hasTable('settings');
-       if ($controll) {
-
-
         if (\SiteHelpers::ayar('maintenance_mode') == 1 && Auth::user()) {
             $sliders = cache()->remember('home_sliders_key', $minutes, function () {
                 return Slider::all()->where('isActive', 1);
@@ -95,9 +91,7 @@ class HomeController extends Controller
 
             return view('errors.503');
         }
-       } else {
-           return redirect('/install');
-       }
+
     }
 
     public function catalog()

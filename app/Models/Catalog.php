@@ -6,9 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Catalog extends Model
+class Catalog extends BaseModel
 {
     use HasFactory;
 
     protected $guarded = array('_token');
+
+    public function getNameAttribute()
+    {
+        return $this->getLocalizedAttribute('name');
+    }
+
 }
