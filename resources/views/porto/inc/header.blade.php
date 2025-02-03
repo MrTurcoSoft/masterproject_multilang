@@ -5,7 +5,7 @@
                 <div class="header-column">
                     <div class="header-row">
                         <div class="header-logo">
-                            <a href="{{ route('localized.home', ['locale' => app()->getLocale()]) }}">
+                            <a href="{{ app()->getLocale() === config('app.locale') ? route('home') : route('localized.home', ['locale' => app()->getLocale()]) }}">
                                 <img alt="DellaSoft" width="100" height="48" data-sticky-width="82" data-sticky-height="40" data-sticky-top="25" src="{{ asset(config('settings.logo')) }}">
                             </a>
 
@@ -18,11 +18,11 @@
                         <nav class="header-nav-top">
                             <ul class="nav nav-pills">
                                 <li class="nav-item nav-item-anim-icon d-none d-md-block">
-                                    <a class="nav-link ps-0" href="{{ route('localized.about', ['locale' => app()->getLocale()]) }}"><i class="fas fa-angle-right"></i> {{___("About Us")}}</a>
+                                    <a class="nav-link ps-0" href="{{ app()->getLocale() === config('app.locale') ? route('about') : route('localized.about', ['locale' => app()->getLocale()]) }}"><i class="fas fa-angle-right"></i> {{___("About Us")}}</a>
 
                                 </li>
                                 <li class="nav-item nav-item-anim-icon d-none d-md-block">
-                                    <a class="nav-link" href="{{ route('localized.contact', ['locale' => app()->getLocale()]) }}"><i class="fas fa-angle-right"></i> {{___("Contact Us")}}</a>
+                                    <a class="nav-link" href="{{ app()->getLocale() === config('app.locale') ? route('contact') : route('localized.contact', ['locale' => app()->getLocale()]) }}"><i class="fas fa-angle-right"></i> {{___("Contact Us")}}</a>
 
                                 </li>
                                 <li class="nav-item nav-item-left-border nav-item-left-border-remove nav-item-left-border-md-show">
@@ -39,7 +39,7 @@
                                 <nav class="collapse">
                                     <ul class="nav nav-pills" id="mainNav">
                                         <li class="menu-item ">
-                                            <a class="dropdown-item dropdown-toggle @active('home')" href="{{ route('localized.home', ['locale' => app()->getLocale()]) }}">
+                                            <a class="dropdown-item dropdown-toggle @active('home')" href="{{ app()->getLocale() === config('app.locale') ? route('home') : route('localized.home', ['locale' => app()->getLocale()]) }}">
                                                 {{___("Home")}}
                                             </a>
 
@@ -49,15 +49,15 @@
                                             <li class="dropdown">
                                                 <!-- Ana Kategori İsmi -->
                                                 <a class="dropdown-item dropdown-toggle" href="javascript:void(0)">
-                                                    {{ strtoupper($category->name) }}
+                                                    {{ strtoupper($category->cat_name) }}
                                                 </a>
                                                 <!-- Alt Kategoriler -->
                                                 <ul class="dropdown-menu">
                                                     @foreach ($category->altkategoriler as $altkategori)
 
                                                         <li>
-                                                            <a class="dropdown-item" href="{{ route('localized.category', ['locale' => app()->getLocale(), 'slug' => $altkategori->slug]) }}">
-                                                                {{ strtoupper($altkategori->name) }}
+                                                            <a class="dropdown-item" href="{{ app()->getLocale() === config('app.locale') ? route('category', ['slug' => $altkategori->slug]) : route('localized.category', ['slug' => $altkategori->slug]) }}">
+                                                                {{ strtoupper($altkategori->cat_name) }}
                                                             </a>
                                                         </li>
                                                     @endforeach
@@ -65,8 +65,8 @@
                                             </li>
                                             @else {{-- Eğer alt kategorisi yoksa --}}
                                             <li>
-                                                <a class="menu-item" href="{{ route('localized.category', ['locale' => app()->getLocale(), 'slug' => $category->slug]) }}">
-                                                    {{ strtoupper($category->name) }}
+                                                <a class="menu-item" href="{{ app()->getLocale() === config('app.locale') ? route('category', ['slug' => $category->slug]) : route('localized.category', ['slug' => $category->slug]) }}">
+                                                    {{ strtoupper($category->cat_name) }}
                                                 </a>
                                             </li>
                                             @endif
@@ -74,26 +74,26 @@
 
 
                                         <li class="menu-item">
-                                            <a class="dropdown-item dropdown-toggle" href="{{ route('localized.catalogue', ['locale' => app()->getLocale()]) }}">
+                                            <a class="dropdown-item dropdown-toggle" href="{{ app()->getLocale() === config('app.locale') ? route('catalogue') : route('localized.catalogue', ['locale' => app()->getLocale()]) }}">
                                                 {{___("CATALOGUE’S")}}
                                             </a>
 
                                         </li>
                                         <li class="menu-item">
-                                            <a class="dropdown-item dropdown-toggle" href="{{ route('localized.blog-posts', ['locale' => app()->getLocale()]) }}">
+                                            <a class="dropdown-item dropdown-toggle" href="{{ app()->getLocale() === config('app.locale') ? route('blog-posts') : route('localized.blog-posts', ['locale' => app()->getLocale()]) }}">
                                                 {{___("BLOG")}}
                                             </a>
 
                                         </li>
                                         @mobile
                                         <li class="menu-item">
-                                            <a class="dropdown-item dropdown-toggle" href="{{ route('localized.about', ['locale' => app()->getLocale()]) }}">
+                                            <a class="dropdown-item dropdown-toggle" href="{{ app()->getLocale() === config('app.locale') ? route('about') : route('localized.about', ['locale' => app()->getLocale()]) }}">
                                                 {{___("About Us")}}
                                             </a>
 
                                         </li>
                                         <li class="menu-item">
-                                            <a class="dropdown-item dropdown-toggle" href="{{ route('localized.contact', ['locale' => app()->getLocale()]) }}">
+                                            <a class="dropdown-item dropdown-toggle" href="{{ app()->getLocale() === config('app.locale') ? route('contact') : route('localized.contact', ['locale' => app()->getLocale()]) }}">
                                                 {{___("Contact Us")}}
                                             </a>
 

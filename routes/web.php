@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CertificateController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\DeeplTranslateController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LangController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\SitemapController;
@@ -104,6 +105,24 @@ Route::get('lang/change', [LangController::class, 'change'])->name('changeLang')
 |-------------------------------------------------------------------------|
 */
 
+// Varsayılan dil (en) rotaları:
+Route::group([], function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    // Hakkımızda sayfası
+    Route::get('/about', [App\Http\Controllers\AboutController::class, 'index'])->name('about');
+    // İletişim sayfası
+    Route::get('/contact', [App\Http\Controllers\ContactController::class, 'index'])->name('contact');
+    //Katalog sayfası
+    Route::get('/catalogue', [App\Http\Controllers\HomeController::class, 'catalog'])->name('catalogue');
+    // Kategoriler (liste)
+    Route::get('/category/{slug}', [App\Http\Controllers\CategoryController::class, 'index'])->name('category');
+    //Product
+    Route::get('/product/{slug}', [App\Http\Controllers\ProductController::class, 'index'])->name('product');
+    // Blog postları (liste)
+    Route::get('/blog_posts', [App\Http\Controllers\PostController::class, 'index'])->name('blog-posts');
+    // Blog detay (tek bir yazı)
+    Route::get('/blog_posts/{slug}', [App\Http\Controllers\PostController::class, 'show'])->name('blog-posts.show');
+});
 
 
 

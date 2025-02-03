@@ -82,6 +82,7 @@ return [
     |
     */
     'locale' => 'en', // Varsayılan dil
+    'supported_locales' => ['fr', 'de','it','hu','sr','es'], // Desteklenen diller
 
 
     /*

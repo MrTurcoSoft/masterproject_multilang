@@ -13,6 +13,9 @@ class Product extends BaseModel
 
     protected $guarded = array('_token');
 
+
+    protected $appends = ['name', 'title', 'slug', 'description', 'page_title', 'page_description', 'page_keywords'];
+
     public function kategoriler()
     {
         return $this->belongsToMany('App\Models\Category','category_products');
@@ -28,32 +31,45 @@ class Product extends BaseModel
         return $this->hasOne('App\Models\ProductDetail')->withDefault();
     }
 
-    public function getNameAttribute()
+    public function getNameAttribute($value)
     {
-        return $this->getLocalizedAttribute('name');
+        $locale = app()->getLocale(); // Geçerli dil
+        return $this->{'name_' . $locale} ?? $value; // Dil sütunu yoksa varsayılanı döndür
     }
-    public function getTitleAttribute()
+
+    public function getTitleAttribute($value)
     {
-        return $this->getLocalizedAttribute('title');
+        $locale = app()->getLocale();
+        return $this->{'title_' . $locale} ?? $value;
     }
-    public function getDescriptionAttribute()
+
+    public function getSlugAttribute($value)
     {
-        return $this->getLocalizedAttribute('description');
+        $locale = app()->getLocale();
+        return $this->{'slug_' . $locale} ?? $value;
     }
-    public function getPageTitleAttribute()
+
+    public function getDescriptionAttribute($value)
     {
-        return $this->getLocalizedAttribute('page_title');
+        $locale = app()->getLocale();
+        return $this->{'description_' . $locale} ?? $value;
     }
-    public function getPageDescriptionAttribute()
+
+    public function getPageTitleAttribute($value)
     {
-        return $this->getLocalizedAttribute('page_description');
+        $locale = app()->getLocale();
+        return $this->{'page_title_' . $locale} ?? $value;
     }
-    public function getPageKeywordsAttribute()
+
+    public function getPageDescriptionAttribute($value)
     {
-        return $this->getLocalizedAttribute('page_keywords');
+        $locale = app()->getLocale();
+        return $this->{'page_description_' . $locale} ?? $value;
     }
-    public function getSlugAttribute()
+
+    public function getPageKeywordsAttribute($value)
     {
-        return $this->getLocalizedAttribute('slug');
+        $locale = app()->getLocale();
+        return $this->{'page_keywords_' . $locale} ?? $value;
     }
 }
