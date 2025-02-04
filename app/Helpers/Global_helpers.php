@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Facades\File;
 
 if (!function_exists('___')) {
@@ -352,6 +353,42 @@ if (!function_exists('__deleteFile')) {
         }
 
         return false; // Dosya yok veya boş yol
+    }
+}
+
+if (!function_exists('RouteTranslate_')) {
+    function RouteTranslate_($key)
+    {
+        // Geçerli dil ve varsayılan dil tanımlaması
+        $locale = app()->getLocale();
+        $defaultLocale = 'en';
+
+        // Dil dosyasının yolu (örneğin resources/lang/fr/messages.php)
+        $langDirPath = resource_path("lang/{$locale}");
+        $langFilePath = "{$langDirPath}/route.php";
+        $defaultLangFilePath = resource_path("lang/{$defaultLocale}/route.php");
+
+
+
+        // Dil dosyasını dizi olarak yükle
+        $translations = include($langFilePath);
+        $defaultTranslations = include($defaultLangFilePath);
+
+        // Eğer çeviri dosyasında anahtar bulunmuyorsa, hem varsayılan hem de mevcut dile ekle
+        if (!array_key_exists($key, $defaultTranslations)) {
+            $defaultTranslations[$key] = $key;
+            $exportedDefaultTranslations = var_export($defaultTranslations, true);
+            File::put($defaultLangFilePath, "<?php\n\nreturn {$exportedDefaultTranslations};");
+        }
+
+        if (!array_key_exists($key, $translations)) {
+            $translations[$key] = $key;
+            $exportedTranslations = var_export($translations, true);
+            File::put($langFilePath, "<?php\n\nreturn {$exportedTranslations};");
+        }
+
+        // Anahtarın çevirisini döndür
+        return __('route.' . $key);
     }
 }
 

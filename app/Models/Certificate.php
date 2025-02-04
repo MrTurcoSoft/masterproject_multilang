@@ -14,9 +14,6 @@ class Certificate extends BaseModel
     //protected $guarded = array('_token');
     protected $guarded = [];
 
-    public function getNameAttribute()
-    {
-        return $this->getLocalizedAttribute('name');
-    }
+
 
 }

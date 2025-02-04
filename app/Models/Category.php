@@ -14,33 +14,11 @@ class Category extends Model
     protected $guarded = array('_token');
 
 
-
-    public function urunler($locale)
+    public function urunler()
     {
-        $query = $this->belongsToMany(Product::class, 'category_products');
-
-        $products = $query->get();
-
-        if ($products->isEmpty()) {
-            dd("Hiç ürün bulunamadı.");
-        }
-
-        return $products->map(function ($urun) use ($locale) {
-            // Varsayılan dil kontrolü
-            $isDefaultLanguage = $locale === 'en'; // Varsayılan dil 'tr' ise
-
-            // Fallback mekanizması
-            $urun->name = $isDefaultLanguage ? $urun->name : ($urun->{'name_' . $locale} ?? $urun->name);
-            $urun->title = $isDefaultLanguage ? $urun->title : ($urun->{'title_' . $locale} ?? $urun->title);
-            $urun->slug = $isDefaultLanguage ? $urun->slug : ($urun->{'slug_' . $locale} ?? $urun->slug);
-            $urun->description = $isDefaultLanguage ? $urun->description : ($urun->{'description_' . $locale} ?? $urun->description);
-            $urun->page_title = $isDefaultLanguage ? $urun->page_title : ($urun->{'page_title_' . $locale} ?? $urun->page_title);
-            $urun->page_description = $isDefaultLanguage ? $urun->page_description : ($urun->{'page_description_' . $locale} ?? $urun->page_description);
-            $urun->page_keywords = $isDefaultLanguage ? $urun->page_keywords : ($urun->{'page_keywords_' . $locale} ?? $urun->page_keywords);
-
-            return $urun;
-        });
+        return $this->belongsToMany(Product::class, 'category_products'); // Pivot tabloyu belirtin
     }
+
 
     public function getNameAttribute()
     {

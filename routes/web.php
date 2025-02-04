@@ -51,14 +51,6 @@ Route::get('/optimize', function () {
     echo 'Cache optimize edildi!';
 });
 
-Route::get('/new-install', function () {
-    Artisan::call('storage:link');
-    Artisan::call('migrate:refresh');
-    Artisan::call('db:seed');
-
-    echo 'Veritaban(lar)ı başarıyla oluşturuldu';
-});
-
 
 Auth::routes();
 
@@ -106,7 +98,7 @@ Route::get('lang/change', [LangController::class, 'change'])->name('changeLang')
 */
 
 // Varsayılan dil (en) rotaları:
-Route::group([], function () {
+Route::group(['middleware' => 'setlocale'], function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     // Hakkımızda sayfası
     Route::get('/about', [App\Http\Controllers\AboutController::class, 'index'])->name('about');
@@ -125,29 +117,24 @@ Route::group([], function () {
 });
 
 
-
 // Çok dilli rotaları tanımlama (prefix: {locale})
-Route::group([
-    'prefix' => '{locale}', // Dil kodunu URL'de kullan (örnek: /en, /fr)
-    'middleware' => ['setlocale'], // Middleware ile dili otomatik ayarla
-    'where' => ['locale' => 'fr|de|it|hu|sr|es'] // Desteklenen diller
-], function () {
+Route::group(['prefix' => '{locale}', 'where' => ['locale' => 'fr|de|it|hu|sr|es']], function () {
     // Ana sayfa
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('localized.home');
     // Hakkımızda sayfası
-    Route::get('/' . trans('route.about', [], app()->getLocale()), [App\Http\Controllers\AboutController::class, 'index'])->name('localized.about');
+    Route::get('/' . RouteTranslate_('about'), [App\Http\Controllers\AboutController::class, 'index'])->name('localized.about');
     // İletişim sayfası
-    Route::get('/' . trans('route.contact', [], app()->getLocale()), [App\Http\Controllers\ContactController::class, 'index'])->name('localized.contact');
+    Route::get('/' . RouteTranslate_('contact'), [App\Http\Controllers\ContactController::class, 'index'])->name('localized.contact');
     //Katalog sayfası
-    Route::get('/' . trans('route.catalogue', [], app()->getLocale()), [App\Http\Controllers\HomeController::class, 'catalog'])->name('localized.catalogue');
+    Route::get('/' . RouteTranslate_('catalogue'), [App\Http\Controllers\HomeController::class, 'catalog'])->name('localized.catalogue');
     // Kategoriler (liste)
-    Route::get('/' . trans('route.category', [], app()->getLocale()). '/{slug}', [App\Http\Controllers\CategoryController::class, 'index'])->name('localized.category');
+    Route::get('/' . RouteTranslate_('category') . '/{slug}', [App\Http\Controllers\CategoryController::class, 'index'])->name('localized.category');
     //Product
-    Route::get('/' . trans('route.product', [], app()->getLocale()). '/{slug}', [App\Http\Controllers\ProductController::class, 'index'])->name('localized.product');
+    Route::get('/' . RouteTranslate_('product') . '/{slug}', [App\Http\Controllers\ProductController::class, 'index'])->name('localized.product');
     // Blog postları (liste)
-    Route::get('/' . trans('route.blog_posts', [], app()->getLocale()), [App\Http\Controllers\PostController::class, 'index'])->name('localized.blog-posts');
+    Route::get('/' . RouteTranslate_('blog_posts'), [App\Http\Controllers\PostController::class, 'index'])->name('localized.blog-posts');
     // Blog detay (tek bir yazı)
-    Route::get('/' . trans('route.blog_posts', [], app()->getLocale()) . '/{slug}', [App\Http\Controllers\PostController::class, 'show'])->name('localized.blog-posts.show');
+    Route::get('/' . RouteTranslate_('blog_posts') . '/{slug}', [App\Http\Controllers\PostController::class, 'show'])->name('localized.blog-posts.show');
 });
 
 

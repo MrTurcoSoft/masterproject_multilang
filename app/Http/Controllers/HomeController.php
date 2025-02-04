@@ -34,7 +34,10 @@ class HomeController extends Controller
      */
     public function index()
     {
+      //  dd(app()->getLocale() === config('app.locale'));
         $minutes = 180;
+
+
 
         if (\SiteHelpers::ayar('maintenance_mode') == 1 && Auth::user()) {
             $sliders = cache()->remember('home_sliders_key', $minutes, function () {

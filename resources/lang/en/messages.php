@@ -25,4 +25,11 @@ return array (
   'Saturday   -' => 'Saturday   -',
   'Sunday     - Closed' => 'Sunday     - Closed',
   'No products found' => 'No products found',
+  'Share' => 'Share',
+  'Product' => 'Product',
+  'Description' => 'Description',
+  'Spesifications' => 'Spesifications',
+  'Volume/Pack
+                            Of:' => 'Volume/Pack
+                            Of:',
 );

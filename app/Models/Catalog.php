@@ -12,9 +12,6 @@ class Catalog extends BaseModel
 
     protected $guarded = array('_token');
 
-    public function getNameAttribute()
-    {
-        return $this->getLocalizedAttribute('name');
-    }
+
 
 }

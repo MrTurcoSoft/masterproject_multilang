@@ -26,4 +26,17 @@ class LanguageHelper
         // Eğer lokalize sütun yoksa varsayılan sütunu döndür
         return $model->attributes[$columnBaseName] ?? null;
     }
+
+    function menuUrl(string $routeName, array $parameters = []): string
+    {
+        $locale = app()->getLocale();
+        $defaultLocale = config('app.locale');
+
+        // Varsayılan dilde (örneğin "en") locale eklenmez
+        if ($locale !== $defaultLocale) {
+            $parameters = array_merge(['locale' => $locale], $parameters);
+        }
+
+        return route($routeName, $parameters);
+    }
 }

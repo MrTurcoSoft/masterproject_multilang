@@ -31,45 +31,5 @@ class Product extends BaseModel
         return $this->hasOne('App\Models\ProductDetail')->withDefault();
     }
 
-    public function getNameAttribute($value)
-    {
-        $locale = app()->getLocale(); // Geçerli dil
-        return $this->{'name_' . $locale} ?? $value; // Dil sütunu yoksa varsayılanı döndür
-    }
 
-    public function getTitleAttribute($value)
-    {
-        $locale = app()->getLocale();
-        return $this->{'title_' . $locale} ?? $value;
-    }
-
-    public function getSlugAttribute($value)
-    {
-        $locale = app()->getLocale();
-        return $this->{'slug_' . $locale} ?? $value;
-    }
-
-    public function getDescriptionAttribute($value)
-    {
-        $locale = app()->getLocale();
-        return $this->{'description_' . $locale} ?? $value;
-    }
-
-    public function getPageTitleAttribute($value)
-    {
-        $locale = app()->getLocale();
-        return $this->{'page_title_' . $locale} ?? $value;
-    }
-
-    public function getPageDescriptionAttribute($value)
-    {
-        $locale = app()->getLocale();
-        return $this->{'page_description_' . $locale} ?? $value;
-    }
-
-    public function getPageKeywordsAttribute($value)
-    {
-        $locale = app()->getLocale();
-        return $this->{'page_keywords_' . $locale} ?? $value;
-    }
 }

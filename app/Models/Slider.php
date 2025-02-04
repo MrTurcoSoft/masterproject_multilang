@@ -19,21 +19,6 @@ class Slider extends BaseModel
         'image'
     ];
 
-    public function getTitleAttribute()
-    {
-        return $this->getLocalizedAttribute('title');
-    }
-    public function getContentAttribute()
-    {
-        return $this->getLocalizedAttribute('content');
-    }
-    public function getContent2Attribute()
-    {
-        return $this->getLocalizedAttribute('content2');
-    }
-    public function getBtnTextAttribute()
-    {
-        return $this->getLocalizedAttribute('btnText');
-    }
+
 }
 

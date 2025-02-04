@@ -9,6 +9,10 @@ class PostController extends Controller
 {
     public function index()
     {
+       // dd(trans('route.blog_posts', [], app()->getLocale()));
+        $post = \App\Models\Post::find(22);
+        $post->testLocale();
+
         $posts = Post::paginate(12);
         return view('porto.posts.index', compact('posts'));
     }

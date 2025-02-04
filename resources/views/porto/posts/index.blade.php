@@ -41,7 +41,7 @@
                             <div class="col-md-4">
                                 <article class="post post-medium border-0 pb-0 mb-5">
                                     <div class="post-image">
-                                        <a href="{{route('blog-posts.show',$post->slug)}}">
+                                        <a href="{{ app()->getLocale() === config('app.locale') ? route('blog-posts.show', ['slug' => $post->slug]) : route('localized.blog-posts.show', ['slug' => $post->slug]) }}">
                                             <img src="{{asset($post->image)}}"
                                                  class="img-fluid img-thumbnail img-thumbnail-no-borders rounded-0"
                                                  alt="{{$post->title}}"/>
@@ -51,7 +51,7 @@
                                     <div class="post-content">
 
                                         <h2 class="font-weight-semibold text-5 line-height-6 mt-3 mb-2"><a
-                                                href="{{route('blog-posts.show',$post->slug)}}">{{$post->title}}</a></h2>
+                                                href="{{ app()->getLocale() === config('app.locale') ? route('blog-posts.show', ['slug' => $post->slug]) : route('localized.blog-posts.show', ['slug' => $post->slug]) }}">{{$post->title}}</a></h2>
                                         <p>{!! Str::limit($post->content, 150)  !!}...</p>
 
                                         <div class="post-meta">
@@ -68,7 +68,7 @@
                                                     <i class="fa-regular fa-eye"></i> {{$post->views}}
 
                                             </span>
-                                            <span class="d-block mt-2"><a href="{{route('blog-posts.show',$post->slug)}}"
+                                            <span class="d-block mt-2"><a href="{{ app()->getLocale() === config('app.locale') ? route('blog-posts.show', ['slug' => $post->slug]) : route('localized.blog-posts.show', ['slug' => $post->slug]) }}"
                                                                           class="btn btn-xs btn-light text-1 text-uppercase">Read More</a></span>
                                         </div>
 
