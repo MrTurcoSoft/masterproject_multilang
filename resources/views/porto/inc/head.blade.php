@@ -49,39 +49,12 @@
     <!-- Skin CSS -->
     <link id="skinCSS" rel="stylesheet" href="{{asset('porto/css/skins/default.css')}}">
 
-    <style>
-        .language-switcher {
-            position: relative;
-            display: inline-block;
-        }
-
-        .language-switcher .dropdown-toggle {
-            border: none;
-            background-color: transparent;
-            padding: 0;
-            display: flex;
-            align-items: center;
-        }
-
-        .language-switcher .dropdown-menu {
-            min-width: 150px;
-            padding: 0;
-        }
-
-        .language-switcher .dropdown-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .dropdown-item.active {
-            font-weight: bold;
-            color: #007bff; /* Bootstrap'in primary rengi */
-            background-color: #f8f9fa; /* Hafif bir arka plan rengi */
-        }
-    </style>
 
 
-    @yield('page-css')
+
+
+    @stack('styles')
+
     <!-- Yandex.Metrika counter -->
     <script type="text/javascript" >
         (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};

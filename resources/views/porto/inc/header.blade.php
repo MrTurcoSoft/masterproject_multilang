@@ -101,24 +101,14 @@
                                         </li>
                                         @endmobile
                                     </ul>
+                                    <div class="ms-auto">
+                                        @include('components.language-switcher')
+                                    </div>
                                 </nav>
                             </div>
-                            <div class="dropdown language-switcher">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown"
-            data-bs-toggle="dropdown" aria-expanded="false">
-        <img src="{{ asset('porto/img/flags/' . $locale . '.svg') }}" alt="{{ $locale }}" width="20" height="15"> {{ strtoupper($locale) }}
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="languageDropdown">
-        @foreach (['en' => 'English', 'de' => 'Deutsch', 'es' => 'Español', 'fr' => 'Français', 'hu' => 'Magyar', 'it' => 'Italiano', 'sr' => 'Српски'] as $lang => $language)
-            <li>
-                <a class="dropdown-item {{ $locale === $lang ? 'active' : '' }}" href="{{ route('changeLanguage', $lang) }}">
-                    <img src="{{ asset('porto/img/flags/' . $lang . '.svg') }}" alt="{{ $language }}" width="20" height="15">
-                    {{ $language }}
-                </a>
-            </li>
-        @endforeach
-    </ul>
-</div>
+
+                            <div class="d-flex align-items-center">
+
                             <ul class="header-social-icons social-icons d-none d-sm-block">
                                 <li class="social-icons-instagram">
                                     <a href="https://www.instagram.com/{{config('settings.instagram')}}" target="_blank"

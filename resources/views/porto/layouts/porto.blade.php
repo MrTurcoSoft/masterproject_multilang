@@ -3,7 +3,7 @@
     $defaultLocale = config('app.fallback_locale');
 @endphp
     <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @include('porto.inc.head')
 <body class="loading-overlay-showing" data-loading-overlay
       data-plugin-options="{'hideDelay': 500, 'effect': 'percentageProgress2'}">
@@ -43,7 +43,9 @@
 <!-- Theme Initialization Files -->
 <script src="{{asset('porto/js/theme.init.js')}}"></script>
 
-@yield('page-js')
+
+
+@stack('scripts')
 
 </body>
 </html>

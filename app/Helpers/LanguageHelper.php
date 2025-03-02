@@ -159,3 +159,4 @@ if (!function_exists('localized_route')) {
         return route($localizedName, $parameters);
     }
 }
+

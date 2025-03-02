@@ -465,3 +465,269 @@ if (!function_exists('changeLocaleUrl')) {
         return $currentUrl;
     }
 }
+
+
+if (!function_exists('getRouteTranslations')) {
+    function getRouteTranslations() {
+        return [
+            'en' => [
+                'about' => 'about',
+                'contact' => 'contact',
+                'catalogue' => 'catalogue',
+                'category' => 'category',
+                'product' => 'product',
+                'blog-posts' => 'blog-posts',
+            ],
+            'de' => [
+                'about' => 'uber-uns',
+                'contact' => 'kontakt',
+                'catalogue' => 'katalog',
+                'category' => 'kategorie',
+                'product' => 'produkt',
+                'blog-posts' => 'blog-artikel',
+            ],
+            'es' => [
+                'about' => 'sobre-nosotros',
+                'contact' => 'contacto',
+                'catalogue' => 'catalogo',
+                'category' => 'categoria',
+                'product' => 'producto',
+                'blog-posts' => 'articulos-del-blog',
+            ],
+            'fr' => [
+                'about' => 'a-propos', // Hakkımızda
+                'contact' => 'contact', // İletişim
+                'catalogue' => 'catalogue', // Katalog
+                'category' => 'categorie', // Kategori
+                'product' => 'produit', // Ürün
+                'blog-posts' => 'articles-de-blog', // Blog Yazıları
+            ],
+            'hu' => [
+                'about' => 'rolunk',
+                'contact' => 'kapcsolat',
+                'catalogue' => 'katalogus',
+                'category' => 'kategoria',
+                'product' => 'termek',
+                'blog-posts' => 'blog-cikkek',
+            ],
+            'it' => [
+                'about' => 'chi-siamo',
+                'contact' => 'contatto',
+                'catalogue' => 'catalogo',
+                'category' => 'categoria',
+                'product' => 'prodotto',
+                'blog-posts' => 'articoli-blog',
+            ],
+            'sr' => [
+                'about' => 'o-nama', // Hakkımızda
+                'contact' => 'kontakt', // İletişim
+                'catalogue' => 'katalog', // Katalog
+                'category' => 'kategorija', // Kategori
+                'product' => 'proizvod', // Ürün
+                'blog-posts' => 'blog-clanci', // Blog Yazıları
+            ],
+        ];
+    }
+}
+
+if (!function_exists('translateUrlPath')) {
+    function translateUrlPath($path, $toLocale) {
+        $translations = getRouteTranslations();
+        $currentLocale = app()->getLocale();
+
+        // URL parçalarını al
+        $segments = explode('/', trim($path, '/'));
+
+        // Her bir segment için çeviri kontrolü
+        foreach ($segments as $key => $segment) {
+            // Mevcut dilin çevirilerini kontrol et
+            foreach ($translations[$currentLocale] ?? [] as $routeKey => $routeValue) {
+                if ($segment === $routeValue) {
+                    // Hedef dildeki karşılığını bul
+                    $segments[$key] = $translations[$toLocale][$routeKey] ?? $segment;
+                    break;
+                }
+            }
+        }
+
+        return implode('/', $segments);
+    }
+}
+
+
+
+if (!function_exists('localizedRoute')) {
+    function localizedRoute($name, $locale = null) {
+        $locale = $locale ?: app()->getLocale();
+        $translations = getRouteTranslations();
+
+        // Varsayılan dil için normal route'u kullan
+        if ($locale === config('app.fallback_locale')) {
+            return route($name);
+        }
+
+        // Diğer diller için dil ekli route'u kullan
+        return route($name . '.' . $locale);
+    }
+}
+
+
+// app/Helpers/RouteTranslations.php
+
+if (!function_exists('getSlugTranslations')) {
+    function getSlugTranslations($model, $currentSlug)
+    {
+        $locales = ['en', 'de', 'es', 'fr', 'hu', 'it', 'sr'];
+        $translations = [];
+
+        // Tüm diller için slug'ları al
+        foreach ($locales as $locale) {
+            $slugField = 'slug_' . $locale;
+            if (isset($model->$slugField)) {
+                $translations[$locale] = $model->$slugField;
+            }
+        }
+
+        return $translations;
+    }
+}
+
+
+if (!function_exists('getSlugTranslations')) {
+    function getSlugTranslations($model, $currentLocale, $targetLocale) {
+        $defaultLocale = config('app.fallback_locale', 'en');
+
+        // Mevcut slug'ı al
+        $currentSlug = $currentLocale === $defaultLocale
+            ? $model->slug  // Varsayılan dil için normal slug
+            : $model->{'slug_' . $currentLocale}; // Diğer diller için dile özgü slug
+
+        // Hedef slug'ı al
+        $targetSlug = $targetLocale === $defaultLocale
+            ? $model->slug  // Varsayılan dil için normal slug
+            : $model->{'slug_' . $targetLocale}; // Diğer diller için dile özgü slug
+
+        return [
+            'current' => $currentSlug,
+            'target' => $targetSlug
+        ];
+    }
+}
+
+if (!function_exists('translateUrlSegments')) {
+    function translateUrlSegments($path, $fromLocale, $toLocale) {
+        $defaultLocale = config('app.fallback_locale', 'en');
+
+        // Statik rota çevirileri
+        $staticRoutes = [
+            'en' => [
+                'about' => 'about',
+                'contact' => 'contact',
+                'catalogue' => 'catalogue',
+                'category' => 'category',
+                'product' => 'product',
+                'blog-posts' => 'blog-posts',
+            ],
+            'de' => [
+                'about' => 'uber-uns',
+                'contact' => 'kontakt',
+                'catalogue' => 'katalog',
+                'category' => 'kategorie',
+                'product' => 'produkt',
+                'blog-posts' => 'blog-artikel',
+            ],
+            'es' => [
+                'about' => 'sobre-nosotros',
+                'contact' => 'contacto',
+                'catalogue' => 'catalogo',
+                'category' => 'categoria',
+                'product' => 'producto',
+                'blog-posts' => 'articulos-del-blog',
+            ],
+            'fr' => [
+                'about' => 'a-propos', // Hakkımızda
+                'contact' => 'contact', // İletişim
+                'catalogue' => 'catalogue', // Katalog
+                'category' => 'categorie', // Kategori
+                'product' => 'produit', // Ürün
+                'blog-posts' => 'articles-de-blog', // Blog Yazıları
+            ],
+            'hu' => [
+                'about' => 'rolunk',
+                'contact' => 'kapcsolat',
+                'catalogue' => 'katalogus',
+                'category' => 'kategoria',
+                'product' => 'termek',
+                'blog-posts' => 'blog-cikkek',
+            ],
+            'it' => [
+                'about' => 'chi-siamo',
+                'contact' => 'contatto',
+                'catalogue' => 'catalogo',
+                'category' => 'categoria',
+                'product' => 'prodotto',
+                'blog-posts' => 'articoli-blog',
+            ],
+            'sr' => [
+                'about' => 'o-nama', // Hakkımızda
+                'contact' => 'kontakt', // İletişim
+                'catalogue' => 'katalog', // Katalog
+                'category' => 'kategorija', // Kategori
+                'product' => 'proizvod', // Ürün
+                'blog-posts' => 'blog-clanci', // Blog Yazıları
+            ]
+        ];
+
+        $segments = explode('/', trim($path, '/'));
+        $newSegments = [];
+
+        // İlk segment dil kodu ise ve varsayılan dile geçiliyorsa, onu atla
+        if (count($segments) > 0 && $segments[0] === $fromLocale && $toLocale === $defaultLocale) {
+            array_shift($segments);
+        }
+
+        foreach ($segments as $segment) {
+            // Önce statik rotalarda ara
+            if (isset($staticRoutes[$fromLocale])) {
+                $key = array_search($segment, $staticRoutes[$fromLocale]);
+                if ($key !== false && isset($staticRoutes[$toLocale][$key])) {
+                    $newSegments[] = $staticRoutes[$toLocale][$key];
+                    continue;
+                }
+            }
+
+            // Statik rotada bulunamadıysa, veritabanında ara
+            try {
+                // Kategori slug'ı olabilir
+                $category = \App\Models\Category::where(function($query) use ($segment, $fromLocale, $defaultLocale) {
+                    if ($fromLocale === $defaultLocale) {
+                        $query->where('slug', $segment);
+                    } else {
+                        $query->where('slug_' . $fromLocale, $segment);
+                    }
+                })->first();
+
+                if ($category) {
+                    $newSegments[] = $toLocale === $defaultLocale
+                        ? $category->slug
+                        : $category->{'slug_' . $toLocale};
+                    continue;
+                }
+
+                // Bulunamadıysa segment'i olduğu gibi kullan
+                $newSegments[] = $segment;
+
+            } catch (\Exception $e) {
+                // Hata durumunda segment'i olduğu gibi kullan
+                $newSegments[] = $segment;
+            }
+        }
+
+        // Eğer hedef dil varsayılan dil değilse ve ilk segment dil kodu değilse, dil kodunu ekle
+        if ($toLocale !== $defaultLocale && (!count($newSegments) || $newSegments[0] !== $toLocale)) {
+            array_unshift($newSegments, $toLocale);
+        }
+
+        return implode('/', $newSegments);
+    }
+}

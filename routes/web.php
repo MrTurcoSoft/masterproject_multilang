@@ -16,12 +16,6 @@ use App\Http\Controllers\SitemapController;
 include __DIR__ . '/langRoutes.php';
 
 
-
-// Desteklenen diğer diller için prefix kullanarak rotalar
-Route::group(['prefix' => '{locale}', 'middleware' => 'setlocale'], function () {
-    Route::get('/about', [AboutController::class, 'index'])->name('about.index.locale');
-});
-
 // Admin rotaları
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminController::class, 'index'])->name('dashboard');
@@ -70,32 +64,125 @@ Route::middleware(['auth'])->group(function () {
 
 // Dil değiştirme
 Route::get('lang/home', [LangController::class, 'index']);
+// routes/web.php
+
+// routes/web.php içinde mevcut change-language route'unu güncelleyin
+
+// routes/web.php
+
 Route::get('change-language/{locale}', function ($locale) {
-    if (in_array($locale, ['en', 'de', 'es', 'fr', 'hu', 'it', 'sr'])) {
-        // Mevcut URL'yi al
-        $previousUrl = url()->previous();
-
-        // Mevcut dil dizinini al (örneğin: 'hu')
-        $segments = explode('/', parse_url($previousUrl, PHP_URL_PATH));
-
-        // İlk segmenti (dil kodu) yeni dil kodu ile değiştir
-        if (in_array($segments[1], ['en', 'de', 'es', 'fr', 'hu', 'it', 'sr'])) {
-            $segments[1] = $locale;
-        } else {
-            // Eğer dil kodu yoksa, başa yeni dil kodunu ekle
-            array_splice($segments, 1, 0, $locale);
-        }
-
-        // Yeni URL'yi oluştur
-        $newUrl = url(implode('/', $segments));
-
-        // Dili session'a kaydet
-        session(['locale' => $locale]);
-        app()->setLocale($locale);
-
-        return redirect($newUrl);
+    if (!in_array($locale, ['en', 'de', 'es', 'fr', 'hu', 'it', 'sr'])) {
+        return redirect()->back();
     }
-    return redirect()->back();
+
+    $previousUrl = url()->previous();
+    $segments = parse_url($previousUrl, PHP_URL_PATH);
+    $segments = trim($segments, '/');
+    $parts = explode('/', $segments);
+
+    // Desteklenen diller
+    $supportedLocales = ['en', 'de', 'es', 'fr', 'hu', 'it', 'sr'];
+
+    // İlk segment dil kodu mu kontrol et
+    $currentLocale = in_array($parts[0], $supportedLocales) ? array_shift($parts) : config('app.fallback_locale', 'en');
+
+    // Statik sayfa çevirileri
+    $translations = [
+        'about' => [
+            'en' => 'about',
+            'de' => 'uber-uns',
+            'es' => 'sobre-nosotros',
+            'fr' => 'a-propos',
+            'hu' => 'rolunk',
+            'it' => 'chi-siamo',
+            'sr' => 'o-nama'
+        ],
+        'contact' => [
+            'en' => 'contact',
+            'de' => 'kontakt',
+            'es' => 'contacto',
+            'fr' => 'contact',
+            'hu' => 'kapcsolat',
+            'it' => 'contatto',
+            'sr' => 'kontakt'
+        ],
+        'catalogue' => [
+            'en' => 'catalogue',
+            'de' => 'katalog',
+            'es' => 'catalogo',
+            'fr' => 'catalogue',
+            'hu' => 'katalogus',
+            'it' => 'catalogo',
+            'sr' => 'katalog'
+        ],
+        'category' => [
+            'en' => 'category',
+            'de' => 'kategorie',
+            'es' => 'categoria',
+            'fr' => 'categorie',
+            'hu' => 'kategoria',
+            'it' => 'categoria',
+            'sr' => 'kategorija'
+        ],
+        'product' => [
+            'en' => 'product',
+            'de' => 'produkt',
+            'es' => 'producto',
+            'fr' => 'produit',
+            'hu' => 'termek',
+            'it' => 'prodotto',
+            'sr' => 'proizvod'
+        ],
+        'blog-posts' => [
+            'en' => 'blog-posts',
+            'de' => 'blog-artikel',
+            'es' => 'articulos-del-blog',
+            'fr' => 'articles-de-blog',
+            'hu' => 'blog-cikkek',
+            'it' => 'articoli-blog',
+            'sr' => 'blog-clanci'
+        ],
+    ];
+
+
+    // Sayfanın yeni URL'ini oluştur
+    $newPath = [];
+
+    // Varsayılan dil değilse, dil kodunu ekle
+    if ($locale !== config('app.fallback_locale', 'en')) {
+        $newPath[] = $locale;
+    }
+
+    // Diğer segmentleri çevirerek ekle
+    foreach ($parts as $part) {
+        $translated = false;
+        // Statik sayfa çevirilerinde ara
+        foreach ($translations as $key => $trans) {
+            if (isset($trans[$currentLocale]) && $trans[$currentLocale] === $part) {
+                $newPath[] = $trans[$locale];
+                $translated = true;
+                break;
+            }
+        }
+        // Çeviri bulunamadıysa olduğu gibi ekle
+        if (!$translated) {
+            $newPath[] = $part;
+        }
+    }
+
+    // Yeni URL'i oluştur
+    $newUrl = url(implode('/', $newPath));
+
+    // Query string varsa ekle
+    $query = parse_url($previousUrl, PHP_URL_QUERY);
+    if ($query) {
+        $newUrl .= '?' . $query;
+    }
+
+    // Dili session'a kaydet
+    session(['locale' => $locale]);
+
+    return redirect($newUrl);
 })->name('changeLanguage');
 
 // API rotaları

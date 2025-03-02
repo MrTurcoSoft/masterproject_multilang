@@ -28,7 +28,7 @@ class CategoryController extends Controller
 
         // Kategoriye ait tüm ürünleri ilişki üzerinden getir
         $products = $cat->urunler->map(function ($urun) use ($locale) {
-            $isDefaultLanguage = $locale === 'en'; // Varsayılan dil 'tr' ise
+            $isDefaultLanguage = $locale === 'en'; // Varsayılan dil 'en' ise
             // Dil bazlı alanları ayarla
             $urun->name = $isDefaultLanguage ? $urun->name : ($urun->{'name_' . $locale} ?? $urun->name);
             $urun->title = $isDefaultLanguage ? $urun->title : ($urun->{'title_' . $locale} ?? $urun->title);
