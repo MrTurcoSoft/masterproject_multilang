@@ -41,7 +41,8 @@
         },
         "files": [
             "app/Helpers/helpers.php",
-            "app/Helpers/Global_helpers.php"
+            "app/Helpers/Global_helpers.php",
+            "app/Helpers/LanguageHelper.php"
         ]
     },
     "autoload-dev": {

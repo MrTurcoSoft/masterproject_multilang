@@ -30,7 +30,7 @@
                 <div class="row align-items-center appear-animation" data-appear-animation="fadeInUpShorter"
                      data-appear-animation-delay="1000">
                     <div class="col-lg-6">
-                        <a href="{{ getLocalizedUrl('contact', ['contact' => 'contact']) }}"
+                        <a href="{{ $locale != $defaultLocale ? url('/'.$locale.'/'.RouteTranslate_('contact')) : route('contact') }}"
                            class="btn btn-modern btn-dark mt-3">{{___('Get In Touch')}}</a>
 
                     </div>

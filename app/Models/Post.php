@@ -41,7 +41,7 @@ class Post extends Model
         $defaultLocale = config('app.locale');
 
         //dd($locale, $defaultLocale); // Trait call'dan önce bu değerleri kontrol edin.
-        dd($locale, config('app.locale'));
+       // dd($locale, config('app.locale'));
     }
 
 

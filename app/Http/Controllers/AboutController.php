@@ -11,32 +11,34 @@ use Illuminate\Support\Facades\Log;
 
 class AboutController extends Controller
 {
-    public function index($locale = null)
-    {
-        $minutes = 180;
+ public function index()
+{
+    $minutes = 180;
 
-        // Aktif dil kodunu al
-        $locale = App::getLocale();
+    // Aktif dil kodunu al
+    $locale = App::getLocale();
 
-        // Dil koduna uygun şekilde veritabanından veri alma
-        $about = Cache::remember("about_key_" . $locale, $minutes, function () {
-            return About::firstOrFail();
-        });
+    // Dil koduna uygun şekilde veritabanından veri alma
+    $about = Cache::remember("about_key_" . $locale, $minutes, function () {
+        return About::firstOrFail();
+    });
 
-        $certificate = Cache::remember("certificates_key_" . $locale, $minutes, function () {
-            return Certificate::all();
-        });
+    $certificate = Cache::remember("certificates_key_" . $locale, $minutes, function () {
+        return Certificate::all();
+    });
 
-        // Tema seçimine göre uygun görünüme yönlendirme
-        $siteTheme = \SiteHelpers::ayar('site_theme');
+    // Tema seçimine göre uygun görünüme yönlendirme
+    $siteTheme = \SiteHelpers::ayar('site_theme');
+    Log::info('Site Theme:', ['site_theme' => $siteTheme]);
 
-        switch ($siteTheme) {
-            case 1:
-                return view('frontend.about', compact('about', 'certificate'));
-            case 2:
-                return view('porto.about', compact('about', 'certificate'));
-            default:
-                return view('default.about', compact('about', 'certificate'));
-        }
+    switch ($siteTheme) {
+        case 1:
+            return view('frontend.about', compact('about', 'certificate'));
+        case 2:
+            return view('porto.about', compact('about', 'certificate'));
+        default:
+            Log::warning('Invalid site theme, redirecting to welcome page.');
+            return view('welcome', compact('about', 'certificate'));
     }
+}
 }

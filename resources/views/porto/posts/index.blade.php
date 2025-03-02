@@ -6,6 +6,7 @@
 @endsection
 
 @section('content')
+
     <section class="page-header page-header-modern bg-color-grey page-header-md">
         <div class="container">
             <div class="row">
@@ -15,8 +16,8 @@
                 </div>
                 <div class="col-md-12 align-self-center order-1">
                     <ul class="breadcrumb d-block text-center">
-                        <li><a href="{{route('home')}}">Home</a></li>
-                        <li class="active">Blog Posts</li>
+                        <li><a href="{{ $locale != $defaultLocale ? url('/'.$locale) : route('home') }}">{{___("Home")}}</a></li>
+                        <li class="active">{{___("Blog")}}</li>
                     </ul>
                 </div>
             </div>
@@ -41,7 +42,7 @@
                             <div class="col-md-4">
                                 <article class="post post-medium border-0 pb-0 mb-5">
                                     <div class="post-image">
-                                        <a href="{{ app()->getLocale() === config('app.locale') ? route('blog-posts.show', ['slug' => $post->slug]) : route('localized.blog-posts.show', ['slug' => $post->slug]) }}">
+                                        <a href="{{ $locale != $defaultLocale ? url('/'.$locale.'/'.RouteTranslate_('blog-posts').'/'.$post->slug) : route('blog-posts', $post->slug) }}">
                                             <img src="{{asset($post->image)}}"
                                                  class="img-fluid img-thumbnail img-thumbnail-no-borders rounded-0"
                                                  alt="{{$post->title}}"/>
@@ -51,7 +52,7 @@
                                     <div class="post-content">
 
                                         <h2 class="font-weight-semibold text-5 line-height-6 mt-3 mb-2"><a
-                                                href="{{ app()->getLocale() === config('app.locale') ? route('blog-posts.show', ['slug' => $post->slug]) : route('localized.blog-posts.show', ['slug' => $post->slug]) }}">{{$post->title}}</a></h2>
+                                                href="{{ $locale != $defaultLocale ? url('/'.$locale.'/'.RouteTranslate_('blog-posts').'/'.$post->slug) : route('blog-posts', $post->slug) }}">{{$post->title}}</a></h2>
                                         <p>{!! Str::limit($post->content, 150)  !!}...</p>
 
                                         <div class="post-meta">
@@ -68,8 +69,8 @@
                                                     <i class="fa-regular fa-eye"></i> {{$post->views}}
 
                                             </span>
-                                            <span class="d-block mt-2"><a href="{{ app()->getLocale() === config('app.locale') ? route('blog-posts.show', ['slug' => $post->slug]) : route('localized.blog-posts.show', ['slug' => $post->slug]) }}"
-                                                                          class="btn btn-xs btn-light text-1 text-uppercase">Read More</a></span>
+                                            <span class="d-block mt-2"><a href="{{ $locale != $defaultLocale ? url('/'.$locale.'/'.RouteTranslate_('blog-posts').'/'.$post->slug) : route('blog-posts', $post->slug) }}"
+                                                                          class="btn btn-xs btn-light text-1 text-uppercase">{{___('Read More')}}</a></span>
                                         </div>
 
                                     </div>

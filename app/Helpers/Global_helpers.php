@@ -359,38 +359,109 @@ if (!function_exists('__deleteFile')) {
 if (!function_exists('RouteTranslate_')) {
     function RouteTranslate_($key)
     {
+        $translations = [
+            'en' => [
+                'about' => 'about',
+                'contact' => 'contact',
+                'catalogue' => 'catalogue',
+                'category' => 'category',
+                'product' => 'product',
+                'blog-posts' => 'blog-posts',
+            ],
+            'de' => [
+                'about' => 'uber-uns',
+                'contact' => 'kontakt',
+                'catalogue' => 'katalog',
+                'category' => 'kategorie',
+                'product' => 'produkt',
+                'blog-posts' => 'blog-artikel',
+            ],
+            'es' => [
+                'about' => 'sobre-nosotros',
+                'contact' => 'contacto',
+                'catalogue' => 'catalogo',
+                'category' => 'categoria',
+                'product' => 'producto',
+                'blog-posts' => 'articulos-del-blog',
+            ],
+            'fr' => [
+                'about' => 'a-propos', // Hakkımızda
+                'contact' => 'contact', // İletişim
+                'catalogue' => 'catalogue', // Katalog
+                'category' => 'categorie', // Kategori
+                'product' => 'produit', // Ürün
+                'blog-posts' => 'articles-de-blog', // Blog Yazıları
+            ],
+            'hu' => [
+                'about' => 'rolunk',
+                'contact' => 'kapcsolat',
+                'catalogue' => 'katalogus',
+                'category' => 'kategoria',
+                'product' => 'termek',
+                'blog-posts' => 'blog-cikkek',
+            ],
+            'it' => [
+                'about' => 'chi-siamo',
+                'contact' => 'contatto',
+                'catalogue' => 'catalogo',
+                'category' => 'categoria',
+                'product' => 'prodotto',
+                'blog-posts' => 'articoli-blog',
+            ],
+            'sr' => [
+                'about' => 'o-nama', // Hakkımızda
+                'contact' => 'kontakt', // İletişim
+                'catalogue' => 'katalog', // Katalog
+                'category' => 'kategorija', // Kategori
+                'product' => 'proizvod', // Ürün
+                'blog-posts' => 'blog-clanci', // Blog Yazıları
+            ],
+        ];
+
+        $locale = app()->getLocale();
+        return $translations[$locale][$key] ?? $key;
+    }
+}
+
+if (!function_exists('__Route')) {
+    function __Route($key, $parameters = [])
+    {
         // Geçerli dil ve varsayılan dil tanımlaması
         $locale = app()->getLocale();
         $defaultLocale = 'en';
 
-        // Dil dosyasının yolu (örneğin resources/lang/fr/messages.php)
-        $langDirPath = resource_path("lang/{$locale}");
-        $langFilePath = "{$langDirPath}/route.php";
-        $defaultLangFilePath = resource_path("lang/{$defaultLocale}/route.php");
+        // Mevcut parametrelere locale ekle
+        $parameters = array_merge( $parameters);
 
-
-
-        // Dil dosyasını dizi olarak yükle
-        $translations = include($langFilePath);
-        $defaultTranslations = include($defaultLangFilePath);
-
-        // Eğer çeviri dosyasında anahtar bulunmuyorsa, hem varsayılan hem de mevcut dile ekle
-        if (!array_key_exists($key, $defaultTranslations)) {
-            $defaultTranslations[$key] = $key;
-            $exportedDefaultTranslations = var_export($defaultTranslations, true);
-            File::put($defaultLangFilePath, "<?php\n\nreturn {$exportedDefaultTranslations};");
+        // Eğer varsayılan dil değilse, localized rotayı döndür
+        if ($locale !== $defaultLocale) {
+            return route("{$key}.$locale", $parameters);
         }
 
-        if (!array_key_exists($key, $translations)) {
-            $translations[$key] = $key;
-            $exportedTranslations = var_export($translations, true);
-            File::put($langFilePath, "<?php\n\nreturn {$exportedTranslations};");
-        }
-
-        // Anahtarın çevirisini döndür
-        return __('route.' . $key);
+        // Varsayılan dil için normal rota
+        return route($key, $parameters);
     }
 }
 
+if (!function_exists('changeLocaleUrl')) {
+    function changeLocaleUrl($locale)
+    {
+        // Geçerli URL'yi al
+        $currentUrl = url()->current();
 
+        // Mevcut dil prefix'ini değiştir
+        foreach (['en', 'de', 'es', 'fr', 'hu', 'it', 'sr'] as $lang) {
+            if (strpos($currentUrl, "/$lang/") !== false || strpos($currentUrl, "/$lang") !== false) {
+                $currentUrl = str_replace("/$lang", "/$locale", $currentUrl);
+                break;
+            }
+        }
 
+        // Eğer dil prefix'i yoksa, başına ekle
+        if (!in_array($locale, [ 'de', 'es', 'fr', 'hu', 'it', 'sr'])) {
+            return url("/$locale");
+        }
+
+        return $currentUrl;
+    }
+}

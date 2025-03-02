@@ -1,13 +1,33 @@
 <?php
 
-return array (
-  'Homepage' => 'Homepage',
-  'About Us' => 'About Us',
-  'Contact Us' => 'Contact Us',
-  'Home' => 'Home',
-  'CATALOGUE’S' => 'CATALOGUE’S',
-  'BLOG' => 'BLOG',
-  'View
-                        CATALOGUE' => 'View
-                        CATALOGUE',
-);
+return [
+    'About Us' => 'Chi siamo',
+    'Address:' => 'Indirizzo:',
+    'BLOG' => 'BLOG',
+    'Business Hours' => 'Orari di apertura',
+    'CATALOGUE\'S' => 'CATALOGO',
+    'CATALOGUE’S' => 'CATALOGO',
+    'Contact Us' => 'Contattaci',
+    'Description' => 'Descrizione',
+    'Email:' => 'Email:',
+    'follow me' => 'seguimi',
+    'Get In Touch' => 'Contattaci',
+    'Home' => 'Home',
+    'Homepage' => 'Pagina iniziale',
+    'How can we help you?' => 'Come possiamo aiutarti?',
+    'Mobile Phone:' => 'Cellulare:',
+    'Mon-Friday -' => 'Lunedì-Venerdì -',
+    'No products found' => 'Nessun prodotto trovato',
+    'Our Brands and Certificates' => 'I nostri marchi e certificati',
+    'Our Office' => 'Il nostro ufficio',
+    'Phone:' => 'Telefono:',
+    'Product' => 'Prodotto',
+    'Read More' => 'Leggi di più',
+    'Saturday   -' => 'Sabato   -',
+    'Share' => 'Condividi',
+    'Spesifications' => 'Specifiche',
+    'Sunday     - Closed' => 'Domenica     - Chiuso',
+    'View' => 'Visualizza',
+    'View CATALOGUE' => 'Visualizza CATALOGO',
+    'Volume/Pack Of:' => 'Volume/Confezione di:',
+];

@@ -2,8 +2,6 @@
 @section('title',SiteHelpers::ayar('mark').' | 404 - Page Not Found')
 @section('page-css')
     {{--sayfaya özel css kodlarını eklemek için kullanın--}}
-
-
 @endsection
 
 @section('content')
@@ -22,7 +20,6 @@
             </div>
         </div>
     </section>
-
     <div class="container">
 
         <section class="http-error">
@@ -37,8 +34,8 @@
                     <h4 class="text-primary">Here are some useful links</h4>
                     <ul class="nav nav-list flex-column">
                         <li class="nav-item"><a class="nav-link" href="{{ route('home', ['locale' => app()->getLocale()]) }}">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('localized.about', ['locale' => app()->getLocale()]) }}">About Us</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('localized.contact', ['locale' => app()->getLocale()]) }}">Contact Us</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('about', ['locale' => app()->getLocale()]) }}">About Us</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('contact', ['locale' => app()->getLocale()]) }}">Contact Us</a></li>
                     </ul>
                 </div>
             </div>

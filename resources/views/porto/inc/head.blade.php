@@ -49,7 +49,36 @@
     <!-- Skin CSS -->
     <link id="skinCSS" rel="stylesheet" href="{{asset('porto/css/skins/default.css')}}">
 
+    <style>
+        .language-switcher {
+            position: relative;
+            display: inline-block;
+        }
 
+        .language-switcher .dropdown-toggle {
+            border: none;
+            background-color: transparent;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .language-switcher .dropdown-menu {
+            min-width: 150px;
+            padding: 0;
+        }
+
+        .language-switcher .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .dropdown-item.active {
+            font-weight: bold;
+            color: #007bff; /* Bootstrap'in primary rengi */
+            background-color: #f8f9fa; /* Hafif bir arka plan rengi */
+        }
+    </style>
 
 
     @yield('page-css')
@@ -61,7 +90,7 @@
             k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
         (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
-        ym(97266777, "init", {
+        ym({{ config('settings.ymetrica') }}, "init", {
             clickmap:true,
             trackLinks:true,
             accurateTrackBounce:true,
@@ -69,6 +98,6 @@
             ecommerce:"dataLayer"
         });
     </script>
-    <noscript><div><img src="https://mc.yandex.ru/watch/97266777" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <noscript><div><img src="https://mc.yandex.ru/watch/{{ config('settings.ymetrica') }}" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
     <!-- /Yandex.Metrika counter -->
 </head>

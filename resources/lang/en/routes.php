@@ -8,4 +8,5 @@ return array (
   'product' => 'product',
   'blog-posts' => 'blog-posts',
   'blog_posts' => 'blog_posts',
+  'home' => 'home',
 );

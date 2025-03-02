@@ -2,12 +2,14 @@
 
 namespace App\Providers;
 
+use App;
 use App\Models\Category;
 use App\Models\Product;
 use App\Observers\CategoryObserver;
 use App\Observers\ProductObserver;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -57,5 +59,11 @@ class AppServiceProvider extends ServiceProvider
         Validator::replacer('dimensions_multiple', function ($message, $attribute, $rule, $parameters) {
             return str_replace([':minWidth', ':minHeight'], $parameters, $message);
         });
+
+        // Mevcut locale değerini tüm view'lara paylaş
+        View::share('_locale', App::getLocale());
+
+        // Varsayılan locale değerini paylaş (isteğe bağlı)
+        View::share('_defaultLocale', config('app.fallback_locale'));
     }
 }
